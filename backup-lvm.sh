@@ -1,7 +1,6 @@
 #!/bin/bash
 
 PATH="${PATH}:/usr/sbin:/sbin:/usr/bin:/bin"
-TIMESTAMP="$(date +%Y%m%d-%Hh%M)"
 
 # ----------------------------------------------------------------------------------------------
 # only run as root

@@ -17,6 +17,21 @@ export BACKNAM='chris-kde-neon-lvm-backup'        # name of the archive
 
 export MIN_SPACE_LEFT=3                           # 3g is minimum space that must be free on the volume group
                                                   # to create a snapshot
+export TIMESTAMP="$(date +%Y%m%d-%Hh%M)"
+
+
+function notify-send() {
+    #Detect the name of the display in use
+    local display=":$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
+
+    #Detect the user using such display
+    local user=$(who | grep '('$display')' | awk '{print $1}' | head -n 1)
+
+    #Detect the id of the user
+    local uid=$(id -u $user)
+
+    sudo -u $user DISPLAY=$display DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus notify-send "$@"
+}
 
 if [ "$(id -u)" != '0' ]
 then
@@ -71,5 +86,4 @@ fi
 #                                                          --auto-close
 
 
-
-./backup-lvm.sh  2>&1 | tee >(gzip --stdout > "${BACKDIR}/${BACKNAM}.log.gz")
+./backup-lvm.sh  2>&1 | tee >(gzip --stdout > "${BACKDIR}/${BACKNAM}-${TIMESTAMP}.log.gz")
