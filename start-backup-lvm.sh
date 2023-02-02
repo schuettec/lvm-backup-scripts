@@ -27,6 +27,13 @@ fi
 ##--------------------------------------------------------------------------------------------------------------
 ## Check all commands the script needs:
 
+## Check GZIP support installed?
+if ! command -v gzip &> /dev/null
+then
+    echo "Gzip could not be found. Is Gzip installed?"
+    exit 1
+fi
+
 
 ## Check LVM support installed?
 if ! command -v lvcreate &> /dev/null
@@ -64,4 +71,4 @@ fi
 #                                                          --auto-close
 
 
-./backup-lvm.sh  2>&1 | tee -a "${BACKDIR}/${BACKNAM}.log"
+./backup-lvm.sh  2>&1 | tee >(gzip --stdout > "${BACKDIR}/${BACKNAM}.log.gz")

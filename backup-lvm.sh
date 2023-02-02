@@ -51,14 +51,14 @@ if test -f "$SNAPSHOT_LOCKFILE"; then
     exit 1
 fi
 
+echo "Creating snapshot lock file: $SNAPSHOT_LOCKFILE"
+echo "[TRY]  touch $SNAPSHOT_LOCKFILE"
+touch $SNAPSHOT_LOCKFILE  && echo "[SUCCESS]" || echo  "[FAILED]"
+
 echo "Creating snapshot '${SNAPSHOT_NAME}' with size of ${MIN_SPACE_LEFT}g (on /dev/${VOLGRP}/${LOGVOL})"
 echo "[TRY]  lvcreate -L ${MIN_SPACE_LEFT}G -s -n ${SNAPSHOT_NAME} /dev/${VOLGRP}/${LOGVOL}"
 
 lvcreate -L ${MIN_SPACE_LEFT}G -s -n ${SNAPSHOT_NAME} /dev/${VOLGRP}/${LOGVOL}  && echo "[SUCCESS]" || echo  "[FAILED]"
-
-echo "Creating snapshot lock file: $SNAPSHOT_LOCKFILE"
-echo "[TRY]  touch $SNAPSHOT_LOCKFILE"
-touch $SNAPSHOT_LOCKFILE  && echo "[SUCCESS]" || echo  "[FAILED]"
 
 # ----------------------------------------------------------------------------------------------
 # main command of the script that does the real stuff
