@@ -71,4 +71,5 @@ fi
 #                                                          --auto-close
 
 
+
 ./backup-lvm.sh  2>&1 | tee >(gzip --stdout > "${BACKDIR}/${BACKNAM}.log.gz")
