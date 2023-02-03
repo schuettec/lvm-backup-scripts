@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export VOLGRP='kde-vg'
-export LOGVOL='lvroot'
+export VOLGRP='ubuntu-vg'
+export LOGVOL='ubuntu-lv'
 
 export LOCK_FOLDER="./locks"
 
@@ -13,14 +13,14 @@ export FSAOPTS='-A -Z15 -j3 -v'                   # options to pass to fsarchive
                                                   # because changes are not possible when creating a snapshot before archiving.
 
 export BACKDIR="$PWD/backups"                     # where to put the backup
-export BACKNAM='chris-kde-neon-lvm-backup'        # name of the archive
+export BACKNAM='morpheus-lvm-backup'        # name of the archive
 
 export MIN_SPACE_LEFT=3                           # 3g is minimum space that must be free on the volume group
                                                   # to create a snapshot
 export TIMESTAMP="$(date +%Y%m%d-%Hh%M)"
 
 
-function notify-send() {
+function notify-send-ex() {
     #Detect the name of the display in use
     local display=":$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
 
@@ -76,7 +76,7 @@ fi
 ## Do real stuff
 if command -v notify-send &> /dev/null
 then
-    notify-send -u critical --app-name="LVM Backup Script" "LVM Backup Script is running!" "Please make sure to wait until the script finished."
+    notify-send-ex -u critical --app-name="LVM Backup Script" "LVM Backup Script is running!" "Please make sure to wait until the script finished."
 fi
 
 
