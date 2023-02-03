@@ -87,3 +87,4 @@ fi
 
 
 ./backup-lvm.sh  2>&1 | tee >(gzip --stdout > "${BACKDIR}/${BACKNAM}-${TIMESTAMP}.log.gz")
+
