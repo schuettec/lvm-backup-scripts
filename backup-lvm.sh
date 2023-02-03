@@ -62,9 +62,10 @@ lvcreate -L ${MIN_SPACE_LEFT}G -s -n ${SNAPSHOT_NAME} /dev/${VOLGRP}/${LOGVOL}  
 # ----------------------------------------------------------------------------------------------
 # main command of the script that does the real stuff
 
+start=`date +%s`
+
 echo "Starting fsarchiver..."
 echo "  fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${LOGVOL}"
-
 if fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${LOGVOL}
 then
         echo "[SUCCESS]"
@@ -76,9 +77,18 @@ else
         RES=1
 fi
 
-echo "Cleanup...removing snapshot '${VOLGRP}/${SNAPSHOT_NAME}'"
-echo "[TRY]  lvremove ${VOLGRP}/${SNAPSHOT_NAME}"
+end=`date +%s`
+runtime=$((end-start))
 
+echo "Cleanup...removing snapshot '${VOLGRP}/${SNAPSHOT_NAME}'"
+echo "[TRY]  lvremove -y ${VOLGRP}/${SNAPSHOT_NAME}"
 lvremove -y ${VOLGRP}/${SNAPSHOT_NAME} && echo "[SUCCESS]" || echo "[FAILED]"
+
+echo "Releasing lock and removing file: $SNAPSHOT_LOCKFILE"
+echo "[TRY] rm -f $SNAPSHOT_LOCKFILE"
+rm -f $SNAPSHOT_LOCKFILE  && echo "[SUCCESS]" || echo  "[FAILED]"
+
+echo -n "[FINISHED] Backup took "
+echo `date -d@$runtime -u +%H:%M:%S`
 
 exit ${RES}
