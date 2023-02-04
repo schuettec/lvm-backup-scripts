@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#######################################################################################################################
+### Use this file as a template for backup configuration.
+### Just fill in the properties as you wish and rename this file to config.sh
+### After that the backup uses the configuration variables of this script.
+#######################################################################################################################
+
+
+export VOLGRP='ubuntu-vg'
+export LOGVOL='ubuntu-lv'
+
+export LOCK_FOLDER="./locks"
+
+export SNAPSHOT_NAME="$LOGVOL-SNAP-BACKUP"
+export SNAPSHOT_LOCKFILE="${LOCK_FOLDER}/${SNAPSHOT_NAME}.snapshot"
+
+export FSAOPTS='-A -Z15 -j3 -v'                   # options to pass to fsarchiver
+                                                  # -A means that the filesystem remains mounted rw,
+                                                  # because changes are not possible when creating a snapshot before archiving.
+
+export BACKDIR="$PWD/backups"                     # where to put the backup
+export BACKNAM='lvm-backup'        # name of the archive
+
+export MIN_SPACE_LEFT=3                           # 3g is minimum space that must be free on the volume group
+                                                  # to create a snapshot
+export TIMESTAMP="$(date +%Y%m%d-%Hh%M)"
