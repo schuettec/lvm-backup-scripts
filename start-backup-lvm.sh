@@ -51,6 +51,15 @@ then
     exit 1
 fi
 
+## Check Mail installed?
+if ! command -v mail &> /dev/null
+then
+    echo "mailutils could not be found. mailutils needs to be installed."
+    echo "To install run:"
+    echo "  sudo apt-get install mailutils"
+    exit 1
+fi
+
 ##--------------------------------------------------------------------------------------------------------------
 ## Maybe we can work with systemd inhibitors to avoid someone shuts down the system during backup
 ## systemd-inhibit --why="Doing weekly backup" bash ./backup-lvm.sh  2>&1 | tee -a "${BACKDIR}/${BACKNAM}.log"
