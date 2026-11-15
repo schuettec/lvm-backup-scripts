@@ -65,8 +65,8 @@ lvcreate -L ${MIN_SPACE_LEFT}G -s -n ${SNAPSHOT_NAME} /dev/${VOLGRP}/${LOGVOL}  
 start=`date +%s`
 
 echo "Starting fsarchiver..."
-echo "  fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${LOGVOL}"
-if fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${LOGVOL}
+echo "  fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${SNAPSHOT_NAME}"
+if fsarchiver savefs ${FSAOPTS} ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa /dev/${VOLGRP}/${SNAPSHOT_NAME}
 then
         echo "[SUCCESS]"
         md5sum ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.fsa > ${BACKDIR}/${BACKNAM}-${TIMESTAMP}.md5
