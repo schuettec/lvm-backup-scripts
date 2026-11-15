@@ -75,7 +75,11 @@ loaded at boot (`lsmod | grep dm_snapshot`; otherwise `echo dm-snapshot | sudo t
 
 The drop-in does not change any function hash; no new approval is needed.
 
-After every script or manifest update, review and approve the new function hash in Morpheus.
+Both manifests list `lvm-backup-lib.sh` and `lvm-backup-config.sh` under `includes:` (needs morpheus-outpost
+1.11.5-2 or newer). The Outpost checks their permissions like the scripts and hashes their contents, so a changed
+library or configuration blocks the functions until they are approved again. Older Outposts ignore `includes:`.
+
+After every script, library, configuration or manifest update, review and approve the new function hash in Morpheus.
 
 Run the local precondition tests with `outpost/tests/test-check.sh`. They use mocked LVM/mount commands and sparse
 archive files; they never access or change real logical volumes.

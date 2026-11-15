@@ -1,6 +1,9 @@
 id: lvm-backup-check
 description: "Checks snapshots, LVM capacity and safely estimated archive capacity"
 script: /etc/morpheus-outpost/scripts/check-lvm-backup.sh
+includes:
+  - /etc/morpheus-outpost/scripts/lvm-backup-lib.sh
+  - /etc/morpheus-outpost/scripts/lvm-backup-config.sh
 result:
   format: json
   schema:

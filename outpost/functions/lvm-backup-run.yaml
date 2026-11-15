@@ -1,6 +1,9 @@
 id: lvm-backup-run
 description: "Creates and verifies an fsarchiver backup from a temporary LVM snapshot"
 script: /etc/morpheus-outpost/scripts/run-lvm-backup.sh
+includes:
+  - /etc/morpheus-outpost/scripts/lvm-backup-lib.sh
+  - /etc/morpheus-outpost/scripts/lvm-backup-config.sh
 result:
   format: json
   schema:

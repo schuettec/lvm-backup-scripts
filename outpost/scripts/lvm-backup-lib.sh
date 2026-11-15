@@ -13,7 +13,7 @@ load_config() {
         printf 'Configuration is not readable: %s\n' "$CONFIG_FILE" >&2
         return 1
     fi
-    # shellcheck source=/dev/null
+    # shellcheck source=lvm-backup-config.sh
     source "$CONFIG_FILE"
 
     local name
