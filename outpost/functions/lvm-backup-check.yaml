@@ -1,0 +1,24 @@
+id: lvm-backup-check
+description: "Checks snapshots, LVM capacity and safely estimated archive capacity"
+script: /etc/morpheus-outpost/scripts/check-lvm-backup.sh
+result:
+  format: json
+  schema:
+    type: object
+    required: [status, backupPossible, reason]
+    properties:
+      status: { type: string, enum: [BACKUP_POSSIBLE, BACKUP_NOT_POSSIBLE] }
+      backupPossible: { type: boolean }
+      reason: { type: string }
+      availableBytes: { type: integer }
+      estimatedBackupBytes: { type: integer }
+      requiredBytes: { type: integer }
+      historySamples: { type: integer }
+      estimateSource: { type: string }
+      activeSnapshots: { type: array, items: { type: string } }
+      logTail: { type: string }
+      jobId: { type: string }
+timeout: 30s
+maxOutput: 16KiB
+concurrency: 1
+sudo: true

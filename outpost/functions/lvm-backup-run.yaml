@@ -1,0 +1,23 @@
+id: lvm-backup-run
+description: "Creates and verifies an fsarchiver backup from a temporary LVM snapshot"
+script: /etc/morpheus-outpost/scripts/run-lvm-backup.sh
+result:
+  format: json
+  schema:
+    type: object
+    required: [status, backupPossible, reason, logTail, jobId]
+    properties:
+      status: { type: string, enum: [BACKUP_SUCCESSFUL, BACKUP_FAILED] }
+      backupPossible: { type: boolean }
+      reason: { type: string }
+      archive: { type: string }
+      checksum: { type: string }
+      archiveBytes: { type: integer }
+      logFile: { type: string }
+      logTail: { type: string }
+      jobId: { type: string }
+timeout: 12h
+maxOutput: 128KiB
+concurrency: 1
+rateLimit: 2/1d
+sudo: true

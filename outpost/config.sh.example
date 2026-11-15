@@ -1,0 +1,29 @@
+#!/bin/bash
+# Install as /etc/morpheus-outpost/scripts/lvm-backup-config.sh, owned by root and mode 0644.
+
+VOLGRP='ubuntu-vg'
+LOGVOL='ubuntu-lv'
+
+# BACKDIR must be located on this mounted filesystem. This prevents accidentally
+# writing into the root filesystem when the backup disk is not mounted.
+BACKUP_MOUNT='/media/backups'
+BACKDIR='/media/backups/lvm'
+BACKNAM='lvm-backup'
+
+# Space needed by the LVM snapshot itself (not by the archive).
+SNAPSHOT_SIZE_GIB=10
+
+# Estimate archive size from completed archives newer than this many days.
+HISTORY_DAYS=28
+# Used until at least one completed archive exists.
+INITIAL_ESTIMATE_GIB=100
+# Required archive space = average * percent / 100 + fixed reserve.
+SPACE_SAFETY_PERCENT=125
+SPACE_RESERVE_GIB=10
+
+# fsarchiver arguments are deliberately an array: no eval or word splitting.
+FSAOPTS=(-A -Z15 -j3 -v)
+
+LOCK_FILE='/run/lock/lvm-backup-outpost.lock'
+LOG_DIR='/var/log/lvm-backup-outpost'
+LOG_TAIL_LINES=80
