@@ -4,6 +4,9 @@ set -u
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 CONFIG_FILE="${LVM_BACKUP_CONFIG:-${SCRIPT_DIR}/lvm-backup-config.sh}"
+# The scripts keep descriptors open on purpose (fd 3: JSON result, fd 9: lock). LVM would warn about each of them on
+# every call ("File descriptor N leaked on lvcreate invocation"). The Outpost clears the environment, so set it here.
+export LVM_SUPPRESS_FD_WARNINGS=1
 
 load_config() {
     if [[ ! -r "$CONFIG_FILE" ]]; then

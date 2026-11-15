@@ -51,13 +51,29 @@ sudo morpheus-outpost function validate lvm-backup-run
 sudo systemctl restart morpheus-outpost
 ```
 
-The Outpost systemd sandbox must allow writes to the backup mount, log directory and lock directory. Add a drop-in
-appropriate to the configured paths, for example:
+The Outpost service runs in a systemd sandbox (`ProtectSystem=full`), and scripts started through sudo inherit it:
+`/etc`, `/usr` and `/boot` are read-only. LVM writes metadata archives to `/etc/lvm/archive` and `/etc/lvm/backup`
+before every change, so without a drop-in `lvcreate` fails with
+`Cannot archive volume group metadata for <vg> to read-only filesystem`. Allow `/etc/lvm` plus the configured backup,
+log and lock paths (`-` = ignore a path that does not exist, e.g. an unmounted backup disk):
+
+```bash
+sudo systemctl edit morpheus-outpost
+```
 
 ```ini
 [Service]
-ReadWritePaths=/media/backups /var/log/lvm-backup-outpost /run/lock
+ReadWritePaths=-/etc/lvm -/media/backups -/var/log/lvm-backup-outpost -/run/lock
 ```
+
+```bash
+sudo systemctl restart morpheus-outpost
+```
+
+The unit also sets `ProtectKernelModules=yes`, so the service cannot load kernel modules. Make sure `dm-snapshot` is
+loaded at boot (`lsmod | grep dm_snapshot`; otherwise `echo dm-snapshot | sudo tee /etc/modules-load.d/dm-snapshot.conf`).
+
+The drop-in does not change any function hash; no new approval is needed.
 
 After every script or manifest update, review and approve the new function hash in Morpheus.
 
